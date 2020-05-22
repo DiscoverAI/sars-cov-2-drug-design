@@ -23,3 +23,6 @@ This is done on AWS. You will also need to run and maintain a
 yourself (you can do this locally for example by just running it).
 
 ![architecture](https://github.com/DiscoverAI/sars-cov-2-drug-design/raw/master/docs/architecture.png)
+
+## Datapipeline
+![architecture](https://github.com/DiscoverAI/sars-cov-2-drug-design/raw/master/docs/datapipeline.png)
