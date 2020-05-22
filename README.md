@@ -7,6 +7,11 @@ This is a git repository with submodules. To get the submodules run:
 git submodule update --init --recursive
 ```
 
+To pull the changes from the submodules run:
+```bash
+git pull --recurse-submodules
+```
+
 # Architecture
 This project consists of multiple jobs that process data, train a generative model, which
 is then used to train a DQN to create a model which will likely bind to the spike protein of SARS-CoV-2.
