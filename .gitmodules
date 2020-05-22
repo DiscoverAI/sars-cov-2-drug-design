@@ -1,0 +1,12 @@
+[submodule "gustavo-fring"]
+	path = gustavo-fring
+	url = git@github.com:DiscoverAI/gustavo-fring.git
+[submodule "tuco"]
+	path = tuco
+	url = git@github.com:DiscoverAI/tuco.git
+[submodule "pinkman"]
+	path = pinkman
+	url = git@github.com:DiscoverAI/pinkman.git
+[submodule "walter-white"]
+	path = walter-white
+	url = git@github.com:DiscoverAI/walter-white.git
