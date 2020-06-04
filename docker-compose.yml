@@ -1,4 +1,4 @@
-version: '2.0'
+version: '3'
 services:
   ehrmantraut:
     build: ./ehrmantraut
@@ -8,3 +8,5 @@ services:
       - DATALAKE
     ports:
       - "5000:5000"
+    volumes:
+      - ./state/ehrmantraut:/usr/src/app/mlflow
