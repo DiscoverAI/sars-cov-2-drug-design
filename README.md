@@ -9,8 +9,7 @@ git submodule update --init --recursive
 
 To pull the changes from the submodules run:
 ```bash
-git pull --recurse-submodules
-git submodule update --remote
+git pull --recurse-submodules && git submodule update --remote
 ```
 
 # Architecture
