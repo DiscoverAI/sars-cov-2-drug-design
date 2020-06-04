@@ -1,0 +1,10 @@
+version: '2.0'
+services:
+  ehrmantraut:
+    build: ./ehrmantraut
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DATALAKE
+    ports:
+      - "5000:5000"
