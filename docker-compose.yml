@@ -10,3 +10,17 @@ services:
       - "5000:5000"
     volumes:
       - ./state/ehrmantraut:/usr/src/app/mlflow
+
+  saul-goodman:
+    build: ./saul-goodman
+    environment:
+      - AIRFLOW_HOME=./saul_goodman
+      - AIRFLOW__CORE__FERNET_KEY
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./state/saul-goodman/airflow.db:/usr/src/app/saul_goodman/airflow.db
