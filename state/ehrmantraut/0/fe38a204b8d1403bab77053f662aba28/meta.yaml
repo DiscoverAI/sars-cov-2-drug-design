@@ -1,0 +1,15 @@
+artifact_uri: s3://sars-cov-2-25309b4013524/0/fe38a204b8d1403bab77053f662aba28/artifacts
+end_time: 1595186465574
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: fe38a204b8d1403bab77053f662aba28
+run_uuid: fe38a204b8d1403bab77053f662aba28
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1595186328900
+status: 3
+tags: []
+user_id: ''
