@@ -1,7 +1,11 @@
 # SARS-CoV-2 drug design
-This projects purpose is to create a drug that is likely to bind with the spike proteins of
-SARS-CoV-2 and therefore renders it ineffective. 
- 
+This projects purpose is to create a drug (drug discovery and drug design) that is likely to bind with the spike
+proteins of SARS-CoV-2 und not bind with any human cell receptors. This would render the virus ineffective inside the body.
+
+There is a notebook with more [general information](https://github.com/DiscoverAI/laboratory/blob/master/notebooks/covid19/General%20Information.ipynb)
+about the virus you can read.
+
+## Setup
 This is a git repository with submodules. To get the submodules run:
 ```bash
 git submodule update --init --recursive
@@ -12,7 +16,7 @@ To pull the changes from the submodules run:
 git pull --recurse-submodules && git submodule update --remote
 ```
 
-# Architecture
+## Architecture
 This project consists of multiple jobs that process data, train a generative model, which
 is then used to train a DQN to create a model which will likely bind to the spike protein of SARS-CoV-2.
 
@@ -36,3 +40,21 @@ look at the [docker-compose.yml](https://raw.githubusercontent.com/DiscoverAI/sa
 
 ## Datapipeline
 ![architecture](https://github.com/DiscoverAI/sars-cov-2-drug-design/raw/master/docs/datapipeline.png)
+
+To create a possible candidate drug for SARS-CoV-2 there multiple steps that need to take place.
+From a high level overview the [moses dataset](https://github.com/molecularsets/moses) is being used to create a
+generative model that can be used for drug discovery. The drug is then being changed in order to bind more likely to 
+SARS-CoV-2 with a reinforcement learning model. The result of these models is then being used to create the top 10 drugs
+that are the likeliest candidates for further clinical trial testing.
+
+There is a [notebook](https://github.com/DiscoverAI/laboratory/blob/master/notebooks/covid19/moses-dataset.ipynb) that
+explores the moses dataset for more information.
+
+In detail the steps are:
+1. Normalize and split train and test dataset from moses (pinkman)
+2. Use the train and test dataset to train a generative model (walter_white)
+3. Use the generative model and a predefined environment to train a reinforcement learning agent (gustavo_fring)
+4. Use the trained models and compute the best 10 drug candidates (tuco)
+
+The reinforcement learning agent uses a reinforcement learning environment that uses a docking software to calculate the
+docking affinity of the modified drugs.
