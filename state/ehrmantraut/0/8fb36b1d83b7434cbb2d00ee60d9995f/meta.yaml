@@ -1,0 +1,15 @@
+artifact_uri: s3://sars-cov-2-25309b4013524/0/8fb36b1d83b7434cbb2d00ee60d9995f/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 8fb36b1d83b7434cbb2d00ee60d9995f
+run_uuid: 8fb36b1d83b7434cbb2d00ee60d9995f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1595718420828
+status: 1
+tags: []
+user_id: walter-white

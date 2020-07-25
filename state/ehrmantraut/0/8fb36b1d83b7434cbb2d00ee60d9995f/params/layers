@@ -1,0 +1,1 @@
+{"input": {"neurons": 57}, "stacks": [{"neurons": 30, "activationFunction": "sigmoid"}], "output": {"neurons": 57, "activationFunction": "sigmoid"}}
