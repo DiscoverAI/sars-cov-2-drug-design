@@ -1,0 +1,102 @@
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Name of the project this resources belongs to
+  GroupName:
+    Type: String
+    Description: Name of Group
+
+Resources:
+  BaseUserGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: !Ref GroupName
+      Path: "tortugas"
+      Policies:
+        - !Ref BaseUserManageMFAPolicy
+        - !Ref BaseUserManageAccessKeysPolicy
+        - !Ref BaseUserListIAMUsersPolicy
+  BaseUserManageMFAPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "BaseUserManageMFA"
+      Groups:
+        - !Ref GroupName
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - "iam:DeactivateMFADevice"
+              - "iam:EnableMFADevice"
+              - "iam:ResyncMFADevice"
+              - "iam:ListVirtualMFADevices"
+              - "iam:ListMFADevices"
+            Resource:
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: "true"
+              NumericLessThanEquals:
+                aws:MultiFactorAuthAge: 43200
+          - Effect: Allow
+            Action:
+              -  "iam:CreateVirtualMFADevice"
+            Resource:
+              - "arn:aws:iam::${AWS::AccountId}:mfa/${!aws:username}"
+          - Effect: Allow
+            Action:
+              - "iam:ListVirtualMFADevices"
+              - "iam:ListMFADevices"
+            Resource:
+              - "arn:aws:iam::${AWS::AccountId}:mfa/*"
+  BaseUserManageAccessKeysPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "BaseUserManageAccessKeys"
+      Groups:
+        - !Ref GroupName
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+                - "iam:CreateAccessKey"
+                - "iam:DeleteAccessKey"
+                - "iam:ListAccessKeys"
+                - "iam:UpdateAccessKey"
+                - "iam:GetAccessKeyLastUsed"
+            Resource:
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: "true"
+              NumericLessThanEquals:
+                aws:MultiFactorAuthAge: 43200
+  BaseUserListIAMUsersPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "BaseUserListIAMUsers"
+      Groups:
+        - !Ref GroupName
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - "iam:GetAccountSummary"
+              - "iam:ListAccountAliases"
+              - "iam:ListGroupsForUser"
+              - "iam:ListUsers"
+            Resource:
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/*"
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: "true"
+              NumericLessThanEquals:
+                aws:MultiFactorAuthAge: 43200
+          - Effect: Allow
+            Action:
+              - "iam:GetUser"
+            Resource:
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
