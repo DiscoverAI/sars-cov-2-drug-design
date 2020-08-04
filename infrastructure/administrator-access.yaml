@@ -37,5 +37,7 @@ Resources:
                 Resource:
                   - "*"
                 Condition:
-                  MultifactorPresent: Bool ["aws:MultiFactorAuthPresent", "true"]
-                  MultifactorAge: NumericLessThanEquals ["aws:MultiFactorAuthAge", "43200"]
+                  Bool:
+                    aws:MultiFactorAuthPresent: "true"
+                  NumericLessThanEquals:
+                    aws:MultiFactorAuthAge: 43200
