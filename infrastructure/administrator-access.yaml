@@ -11,6 +11,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Ref RoleName
+      MaxSessionDuration: 43200
       Tags:
         - Key: Project
           Value: !Ref ProjectName
