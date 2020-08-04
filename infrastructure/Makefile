@@ -1,11 +1,8 @@
 project_name = "sars-cov-2"
 admin_role_name = "administrator"
-<<<<<<< HEAD
 developer_role_name = "developer"
-=======
-develeper_role_name = "developer"
 group_name = "base-user"
->>>>>>> km: adding base user group
+org_name = "tortugas"
 region = "eu-central-1"
 
 .PHONY: administrator-access-template-test
@@ -36,6 +33,21 @@ developer-access:
 		--profile base \
 		--parameter-overrides ProjectName=$(project_name) RoleName=$(developer_role_name)
 
+.PHONY: users-template-test
+users-template-test:
+	aws cloudformation validate-template --profile base --region $(region) --template-body file://./users.yaml >> /dev/null
+
+.PHONY: users
+users:
+	aws cloudformation deploy \
+		--template-file users.yaml \
+		--stack-name "$(project_name)-users" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile base \
+		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) OrgName=$(org_name)
+
+
 .PHONY: base-user-group-template-test
 base-user-group-template-test:
 	aws cloudformation validate-template --profile base --region $(region) --template-body file://./base-user-group.yaml >> /dev/null
@@ -49,3 +61,10 @@ base-user-group:
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile base \
 		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name)
+
+
+.PHONY: templates-test
+templates-test: base-user-group-template-test users-template-test developer-access-template-test administrator-access-template-test
+
+.PHONY: infrastructure
+infrastructure: base-user-group users developer-access administrator-access

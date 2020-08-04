@@ -1,0 +1,22 @@
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Name of the project this resources belongs to
+  GroupName:
+    Type: String
+    Description: The Base User Group name
+  OrgName:
+    Type: String
+    Description: Org Name
+
+Resources:
+  UserCWindheuser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: "cwindheuser"
+      Groups:
+        - !Ref GroupName
+      Path: !Sub "/${OrgName}/"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
