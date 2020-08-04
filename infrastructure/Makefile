@@ -1,6 +1,6 @@
 project_name = "sars-cov-2"
 admin_role_name = "administrator"
-develeper_role_name = "developer"
+developer_role_name = "developer"
 region = "eu-central-1"
 
 .PHONY: administrator-access-template-test
@@ -16,6 +16,20 @@ administrator-access:
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile base \
 		--parameter-overrides ProjectName=$(project_name) RoleName=$(admin_role_name)
+
+.PHONY: developer-access-template-test
+developer-access-template-test:
+	aws cloudformation validate-template --profile base --region $(region) --template-body file://./developer-access.yaml >> /dev/null
+
+.PHONY: developer-access
+developer-access:
+	aws cloudformation deploy \
+		--template-file developer-access.yaml \
+		--stack-name "$(project_name)-developer-access" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile base \
+		--parameter-overrides ProjectName=$(project_name) RoleName=$(developer_role_name)
 
 #.PHONY: datalake-template-test
 #datalake-template-test:

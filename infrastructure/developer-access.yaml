@@ -1,0 +1,70 @@
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Name of the project this resources belongs to
+  RoleName:
+    Type: String
+    Description: Name of role name
+
+Resources:
+  DeveloperBoundary:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: DeveloperBoundary
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            NotAction:
+              - "iam:*"
+              - "organizations:*"
+              - "account:*"
+            Resource:
+              - "*"
+          - Effect: Allow
+            Action:
+              - "iam:CreateServiceLinkedRole"
+              - "iam:DeleteServiceLinkedRole"
+              - "iam:ListAttachedRolePolicies"
+              - "iam:ListRoles"
+              - "iam:PassRole"
+              - "organizations:DescribeOrganization"
+              - "account:ListRegions"
+            Resource:
+              - "*"
+  DeveloperRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref RoleName
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/kmok"
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/lniklas"
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/lkummer"
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: DeveloperAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "iam:AttachRolePolicy"
+                  - "iam:CreateRole"
+                  - "iam:DeleteRolePolicy"
+                  - "iam:DetachRolePolicy"
+                  - "iam:PutRolePermissionsBoundary"
+                  - "iam:PutRolePolicy"
+                Resource:
+                  - "*"
+                Condition:
+                  ForAnyValue:StringEquals:
+                    iam:PermissionsBoundary: !Ref DeveloperBoundary
+
