@@ -18,15 +18,16 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Service:
-                - kmok
-                - lniklas
-                - lkummer
+              AWS:
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/kmok"
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/lniklas"
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/lkummer"
             Action:
               - sts:AssumeRole
       Policies:
         - PolicyName: AdminAccess
           PolicyDocument:
+            Version: 2012-10-17
             Statement:
               - Effect: Allow
                 Action:
