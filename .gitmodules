@@ -10,3 +10,6 @@
 [submodule "ehrmantraut"]
 	path = ehrmantraut
 	url = git@github.com:DiscoverAI/ehrmantraut.git
+[submodule "assume-role"]
+	path = assume-role
+	url = git@github.com:kelseymok/assume-role.git

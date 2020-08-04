@@ -1,0 +1,40 @@
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Name of the project this resources belongs to
+  RoleName:
+    Type: String
+    Description: Name of role name
+
+Resources:
+  AdminRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref RoleName
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - kmok
+                - lniklas
+                - lkummer
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: AdminAccess
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "iam:*"
+                  - "organizations:*"
+                  - "account:*"
+                Resource:
+                  - "*"
+                Condition:
+                  MultifactorPresent: Bool ["aws:MultiFactorAuthPresent", "true"]
+                  MultifactorAge: NumericLessThanEquals ["aws:MultiFactorAuthAge", "43200"]
