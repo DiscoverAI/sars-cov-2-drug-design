@@ -5,6 +5,9 @@ Parameters:
   RoleName:
     Type: String
     Description: Name of role name
+  OrgName:
+    Type: String
+    Description: Name of the organization
 
 Resources:
   DeveloperBoundary:
@@ -50,11 +53,30 @@ Resources:
                 - !Sub "arn:aws:iam::${AWS::AccountId}:user/lkummer"
             Action:
               - sts:AssumeRole
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: "true"
+              NumericLessThanEquals:
+                aws:MultiFactorAuthAge: 43200
+      ManagedPolicyArns:
+          - "arn:aws:iam::aws:policy/PowerUserAccess"
+          - "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+          - "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+          - "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
       Policies:
         - PolicyName: DeveloperAccess
           PolicyDocument:
             Version: 2012-10-17
             Statement:
+              - Effect: Deny
+                Action:
+                  - "*"
+                Resource:
+                  - !Sub "arn:aws:iam::*:group/${OrgName}/*"
+                  - !Sub "arn:aws:iam::*:instance-profile/${OrgName}/*"
+                  - !Sub "arn:aws:iam::*:policy/${OrgName}/*"
+                  - !Sub "arn:aws:iam::*:role/${OrgName}/*"
+                  - !Sub "arn:aws:iam::*:user/${OrgName}/*"
               - Effect: Allow
                 Action:
                   - "iam:AttachRolePolicy"
@@ -68,4 +90,91 @@ Resources:
                 Condition:
                   ForAnyValue:StringEquals:
                     iam:PermissionsBoundary: !Ref DeveloperBoundary
+              - Effect: Allow
+                Action:
+                  - "iam:DeleteRole"
+                  - "iam:GetRole"
+                  - "iam:GetRolePolicy"
+                  - "iam:ListAttachedRolePolicies"
+                  - "iam:ListInstanceProfilesForRole"
+                  - "iam:ListRolePolicies"
+                  - "iam:ListRoleTags"
+                  - "iam:ListRoles"
+                  - "iam:PassRole"
+                  - "iam:TagRole"
+                  - "iam:UntagRole"
+                  - "iam:UpdateAssumeRolePolicy"
+                  - "iam:UpdateRole"
+                  - "iam:UpdateRoleDescription"
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
+                  - "iam:GetGroup"
+                  - "iam:GetGroupPolicy"
+                  - "iam:DeleteGroup"
+                  - "iam:DetachGroupPolicy"
+                  - "iam:ListAttachedGroupPolicies"
+                  - "iam:ListGroups"
+                  - "iam:ListGroupPolicies"
+                  - "iam:RemoveUserFromGroup"
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
+                  - "iam:AttachUserPolicy"
+                  - "iam:CreateUser"
+                  - "iam:DeleteUserPolicy"
+                  - "iam:DetachUserPolicy"
+                  - "iam:PutUserPermissionsBoundary"
+                  - "iam:PutUserPolicy"
+                Resource:
+                  - "*"
+                Condition:
+                  ForAnyValue:StringEquals:
+                    iam:PermissionsBoundary: !Ref DeveloperBoundary
+              - Effect: Allow
+                Action:
+                  - "iam:AddUserToGroup"
+                  - "iam:CreateAccessKey"
+                  - "iam:DeleteAccessKey"
+                  - "iam:DeleteUser"
+                  - "iam:GetUser"
+                  - "iam:GetUserPolicy"
+                  - "iam:ListAccessKeys"
+                  - "iam:ListAttachedUserPolicies"
+                  - "iam:ListGroupsForUser"
+                  - "iam:ListUsers"
+                  - "iam:ListUserPolicies"
+                  - "iam:TagUser"
+                  - "iam:UntagUser"
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
+                  - "iam:CreatePolicy"
+                  - "iam:CreatePolicyVersion"
+                  - "iam:DeletePolicy"
+                  - "iam:DeletePolicyVersion"
+                  - "iam:GetPolicy"
+                  - "iam:GetPolicyVersion"
+                  - "iam:ListEntitiesForPolicy"
+                  - "iam:ListPolicies"
+                  - "iam:ListPolicyVersions"
+                  - "iam:SetDefaultPolicyVersion"
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
+                  - "iam:AddRoleToInstanceProfile"
+                  - "iam:CreateInstanceProfile"
+                  - "iam:DeleteInstanceProfile"
+                  - "iam:GetInstanceProfile"
+                  - "iam:ListInstanceProfiles"
+                  - "iam:RemoveRoleFromInstanceProfile"
+                Resource:
+                  - "*"
+
+
+
 
