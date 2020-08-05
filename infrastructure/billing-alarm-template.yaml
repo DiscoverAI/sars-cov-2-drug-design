@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Billing Alerts for AWS Account
+
+Mappings:
+  EstimatedCharges:
+    AlarmRange:
+      "One" : 20      # It will trigger an alarm if your billing gets higher than $20
+      "Two" : 50      # It will trigger an alarm if your billing gets higher than $50
+      "Three" : 100   # It will trigger an alarm if your billing gets higher than $100
+      "Four" : 500    # It will trigger an alarm if your billing gets higher than $500
+      "Five" : 1000   # It will trigger an alarm if your billing gets higher than $1000
+
+Resources:
+  BillingAlertOne:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref BillingAlertTopic
+      AlarmDescription: !Join ["", [Billing Alert for $, !FindInMap [EstimatedCharges, AlarmRange, One]]]
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Currency
+          Value: USD
+      EvaluationPeriods: 1
+      MetricName: EstimatedCharges
+      Namespace: AWS/Billing
+      Period: 21600
+      TreatMissingData: breaching
+      Statistic: Maximum
+      Threshold: !FindInMap [EstimatedCharges, AlarmRange, One]
+
+  BillingAlertTwo:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref BillingAlertTopic
+      AlarmDescription: !Join ["", [Billing Alert for $, !FindInMap [EstimatedCharges, AlarmRange, Two]]]
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Currency
+          Value: USD
+      EvaluationPeriods: 1
+      MetricName: EstimatedCharges
+      Namespace: AWS/Billing
+      TreatMissingData: breaching
+      Period: 21600
+      Statistic: Maximum
+      Threshold: !FindInMap [EstimatedCharges, AlarmRange, Two]
+
+  BillingAlertThree:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref BillingAlertTopic
+      AlarmDescription: !Join ["", [Billing Alert for $, !FindInMap [EstimatedCharges, AlarmRange, Three]]]
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Currency
+          Value: USD
+      EvaluationPeriods: 1
+      MetricName: EstimatedCharges
+      Namespace: AWS/Billing
+      TreatMissingData: breaching
+      Period: 21600
+      Statistic: Maximum
+      Threshold: !FindInMap [EstimatedCharges, AlarmRange, Three]
+
+  BillingAlertFour:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref BillingAlertTopic
+      AlarmDescription: !Join ["", [Billing Alert for $, !FindInMap [EstimatedCharges, AlarmRange, Four]]]
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Currency
+          Value: USD
+      EvaluationPeriods: 1
+      MetricName: EstimatedCharges
+      Namespace: AWS/Billing
+      TreatMissingData: breaching
+      Period: 21600
+      Statistic: Maximum
+      Threshold: !FindInMap [EstimatedCharges, AlarmRange, Four]
+
+  BillingAlertFive:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Ref BillingAlertTopic
+      AlarmDescription: !Join ["", [Billing Alert for $, !FindInMap [EstimatedCharges, AlarmRange, Five]]]
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: Currency
+          Value: USD
+      EvaluationPeriods: 1
+      MetricName: EstimatedCharges
+      Namespace: AWS/Billing
+      TreatMissingData: breaching
+      Period: 21600
+      Statistic: Maximum
+      Threshold: !FindInMap [EstimatedCharges, AlarmRange, Five]
+
+  BillingAlertTopic:
+    Type: AWS::SNS::Topic
