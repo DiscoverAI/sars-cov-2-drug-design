@@ -19,6 +19,18 @@ create-administrator-access:
 		--profile base \
 		--parameter-overrides ProjectName=$(project_name) RoleName=$(admin_role_name)
 
+.PHONY: update-administrator-access
+update-administrator-access:
+	aws cloudformation create-change-set \
+		--change-set-name "$(project_name)-administrator-access-$(shell date +%s)" \
+		--change-set-type UPDATE \
+		--template-body file://./administrator-access.yaml \
+		--stack-name "$(project_name)-administrator-access" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile base \
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(admin_role_name)
+
 .PHONY: create-developer-access-template-test
 create-developer-access-template-test:
 	aws cloudformation validate-template --profile base --region $(region) --template-body file://./developer-access.yaml >> /dev/null
@@ -33,6 +45,18 @@ create-developer-access:
 		--profile base \
 		--parameter-overrides ProjectName=$(project_name) RoleName=$(developer_role_name) OrgName=$(org_name)
 
+.PHONY: update-developer-access
+update-developer-access:
+	aws cloudformation create-change-set \
+		--change-set-name "$(project_name)-developer-access-$(shell date +%s)" \
+		--change-set-type UPDATE \
+		--template-body file://./developer-access.yaml \
+		--stack-name "$(project_name)-developer-access" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile base \
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(developer_role_name)
+
 .PHONY: create-users-template-test
 create-users-template-test:
 	aws cloudformation validate-template --profile base --region $(region) --template-body file://./users.yaml >> /dev/null
@@ -46,6 +70,18 @@ create-users:
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile base \
 		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) OrgName=$(org_name)
+
+.PHONY: update-users
+update-users:
+	aws cloudformation create-change-set \
+		--change-set-name "$(project_name)-users-$(shell date +%s)" \
+		--change-set-type UPDATE \
+		--template-body file://./users.yaml \
+		--stack-name "$(project_name)-users" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile base \
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(orgName)
 
 
 .PHONY: create-base-user-group-template-test
@@ -62,9 +98,24 @@ create-base-user-group:
 		--profile base \
 		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name)
 
+.PHONY: update-base-user-group
+update-base-user-group:
+	aws cloudformation create-change-set \
+		--change-set-name "$(project_name)-base-user-group-$(shell date +%s)" \
+		--change-set-type UPDATE \
+		--template-body file://./base-user-group.yaml \
+		--stack-name "$(project_name)-base-user-group" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile base \
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name)
 
-.PHONY: create-templates-test
+
+.PHONY: templates-test
 templates-test: create-base-user-group-template-test create-users-template-test create-developer-access-template-test create-administrator-access-template-test
 
 .PHONY: create-infrastructure
-infrastructure: create-base-user-group create-users create-developer-access create-administrator-access
+create-infrastructure: create-base-user-group create-users create-developer-access create-administrator-access
+
+.PHONY: update-infrastructure
+update-infrastructure: update-base-user-group update-users update-developer-access update-administrator-access
