@@ -16,7 +16,7 @@ create-administrator-access:
 		--stack-name "$(project_name)-administrator-access" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile tortugas-base \
 		--parameter-overrides ProjectName=$(project_name) RoleName=$(admin_role_name) OrgName=$(org_name)
 
 .PHONY: update-administrator-access
@@ -28,12 +28,12 @@ update-administrator-access:
 		--stack-name "$(project_name)-administrator-access" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile tortugas-base \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(admin_role_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 .PHONY: create-developer-access-template-test
 create-developer-access-template-test:
-	aws cloudformation validate-template --profile tortugas-base-tortugas/developer --region $(region) --template-body file://./developer-access.yaml >> /dev/null
+	aws cloudformation validate-template --profile tortugas-base-tortugas/administrator --region $(region) --template-body file://./developer-access.yaml >> /dev/null
 
 .PHONY: create-developer-access
 create-developer-access:
@@ -54,7 +54,7 @@ update-developer-access:
 		--stack-name "$(project_name)-developer-access" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/developer \
+		--profile tortugas-base-tortugas/administrator \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(developer_role_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 .PHONY: create-users-template-test
@@ -114,6 +114,17 @@ update-base-user-group:
 create-billing-alarm-template-test:
 	aws cloudformation validate-template --profile tortugas-base-tortugas/developer --region "us-east-1" --template-body file://./base-user-group.yaml >> /dev/null
 
+.PHONY: update-billing-alarm
+update-billing-alarm:
+	aws cloudformation create-change-set \
+		--change-set-name "$(project_name)-billing-alarm-$(shell date +%s)" \
+		--change-set-type UPDATE \
+		--template-body file://./billing-alarm.yaml \
+		--stack-name "$(project_name)-billing-alarm" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile tortugas-base-tortugas/developer \
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=PeriodInSeconds,ParameterValue=21600 ParameterKey=AlarmThresholds,ParameterValue="10,25,50,100,200"
 
 .PHONY: create-billing-alarm
 create-billing-alarm:

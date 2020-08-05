@@ -39,6 +39,7 @@ Resources:
                   - "iam:*"
                   - "organizations:*"
                   - "account:*"
+                  - "cloudformation:*"
                 Resource:
                   - "*"
                 Condition:
