@@ -55,7 +55,7 @@ update-developer-access:
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile base \
-		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(developer_role_name)
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(developer_role_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 .PHONY: create-users-template-test
 create-users-template-test:
