@@ -39,6 +39,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Ref RoleName
+      Path: !Sub "/${OrgName}/"
       MaxSessionDuration: 43200
       Tags:
         - Key: Project
@@ -51,6 +52,8 @@ Resources:
                 - !Sub "arn:aws:iam::${AWS::AccountId}:user/kmok"
                 - !Sub "arn:aws:iam::${AWS::AccountId}:user/lniklas"
                 - !Sub "arn:aws:iam::${AWS::AccountId}:user/lkummer"
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/cwindheuser"
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/rbornemann"
             Action:
               - sts:AssumeRole
             Condition:

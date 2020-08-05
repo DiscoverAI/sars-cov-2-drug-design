@@ -17,7 +17,7 @@ create-administrator-access:
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-administrator \
-		--parameter-overrides ProjectName=$(project_name) RoleName=$(admin_role_name)
+		--parameter-overrides ProjectName=$(project_name) RoleName=$(admin_role_name) OrgName=$(org_name)
 
 .PHONY: update-administrator-access
 update-administrator-access:
@@ -29,7 +29,7 @@ update-administrator-access:
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-administrator \
-		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(admin_role_name)
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(admin_role_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 .PHONY: create-developer-access-template-test
 create-developer-access-template-test:
@@ -81,7 +81,7 @@ update-users:
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-administrator \
-		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(orgName)
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 
 .PHONY: create-base-user-group-template-test
@@ -96,7 +96,7 @@ create-base-user-group:
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-administrator \
-		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name)
+		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) OrgName=$(org_name)
 
 .PHONY: update-base-user-group
 update-base-user-group:
@@ -108,8 +108,7 @@ update-base-user-group:
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-administrator \
-		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name)
-
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 .PHONY: templates-test
 templates-test: create-base-user-group-template-test create-users-template-test create-developer-access-template-test create-administrator-access-template-test

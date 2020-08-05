@@ -20,3 +20,13 @@ Resources:
       Tags:
         - Key: Project
           Value: !Ref ProjectName
+  UserRBornemann:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: "rbornemann"
+      Groups:
+        - !Ref GroupName
+      Path: !Sub "/${OrgName}/"
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName

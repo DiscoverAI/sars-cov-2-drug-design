@@ -5,12 +5,16 @@ Parameters:
   RoleName:
     Type: String
     Description: Name of role name
+  OrgName:
+    Type: String
+    Description: Name of the organization
 
 Resources:
   AdminRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Ref RoleName
+      Path: !Sub "/${OrgName}/"
       MaxSessionDuration: 43200
       Tags:
         - Key: Project

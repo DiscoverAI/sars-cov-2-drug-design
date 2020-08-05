@@ -5,6 +5,9 @@ Parameters:
   GroupName:
     Type: String
     Description: Name of Group
+  OrgName:
+    Type: String
+    Description: Name of the organization
 
 Resources:
   BaseUserGroup:
@@ -12,7 +15,7 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       GroupName: !Ref GroupName
-      Path: "/tortugas/"
+      Path: !Sub "/${OrgName}/"
   BaseUserManageMFAPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -92,5 +95,23 @@ Resources:
           - Effect: Allow
             Action:
               - "iam:GetUser"
+            Resource:
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
+  BaseUserUpdateIAMPasswordPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: "BaseUsersUpdatePassword"
+      Groups:
+        - !Ref BaseUserGroup
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - "iam:GetAccountPasswordPolicy"
+            Resource:
+              - "*"
+          - Effect: Allow
+            Action:
+              - "iam:ChangePassword"
             Resource:
               - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
