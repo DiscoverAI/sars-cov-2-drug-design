@@ -16,6 +16,11 @@ To pull the changes from the submodules run:
 git pull --recurse-submodules && git submodule update --remote
 ```
 
+If you've never worked with submodules before, active work that changes submodules should happen in those respective repositories. For example, if there are changes needed to `Pinkman`, you will need to clone the repository and make your changes there. Afterwards, you can update the submodules in this directory using `git pull --recurse-submodules && git submodule update --remote` to bring the `HEAD` commit up to date.
+
+## Onboarding
+Please visit our [Onboarding doc](ONBOARDING.md).
+
 ## Architecture
 This project consists of multiple jobs that process data, train a generative model, which
 is then used to train a DQN to create a model which will likely bind to the spike protein of SARS-CoV-2.
