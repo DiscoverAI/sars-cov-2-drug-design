@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Billing Alerts for AWS Account
 
 Parameters:
-  Period:
+  PeriodInSeconds:
     Type: Number
     Description: Treshold period in seconds in which trigger will operate
   AlarmThresholds:
@@ -20,11 +20,11 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
         - Name: Currency
-          Value: EUR
+          Value: USD
       EvaluationPeriods: 1
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
-      Period: !Ref Period
+      Period: !Ref PeriodInSeconds
       TreatMissingData: breaching
       Statistic: Maximum
       Threshold: !Select [0, !Ref AlarmThresholds]
@@ -39,12 +39,12 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
         - Name: Currency
-          Value: EUR
+          Value: USD
       EvaluationPeriods: 1
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref Period
+      Period: !Ref PeriodInSeconds
       Statistic: Maximum
       Threshold: !Select [1, !Ref AlarmThresholds]
 
@@ -58,12 +58,12 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
         - Name: Currency
-          Value: EUR
+          Value: USD
       EvaluationPeriods: 1
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref Period
+      Period: !Ref PeriodInSeconds
       Statistic: Maximum
       Threshold: !Select [2, !Ref AlarmThresholds]
 
@@ -77,12 +77,12 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
         - Name: Currency
-          Value: EUR
+          Value: USD
       EvaluationPeriods: 1
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref Period
+      Period: !Ref PeriodInSeconds
       Statistic: Maximum
       Threshold: !Select [3, !Ref AlarmThresholds]
 
@@ -96,12 +96,12 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
         - Name: Currency
-          Value: EUR
+          Value: USD
       EvaluationPeriods: 1
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref Period
+      Period: !Ref PeriodInSeconds
       Statistic: Maximum
       Threshold: !Select [4, !Ref AlarmThresholds]
 

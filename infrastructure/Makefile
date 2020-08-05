@@ -112,7 +112,7 @@ update-base-user-group:
 
 .PHONY: create-billing-alarm-template-test
 create-billing-alarm-template-test:
-	aws cloudformation validate-template --profile tortugas-base-administrator --region "us-east-1" --template-body file://./base-user-group.yaml >> /dev/null
+	aws cloudformation validate-template --profile tortugas-base-tortugas/developer --region "us-east-1" --template-body file://./base-user-group.yaml >> /dev/null
 
 
 .PHONY: create-billing-alarm
@@ -123,7 +123,7 @@ create-billing-alarm:
 		--region "us-east-1" \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-tortugas/developer \
-		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) Period=3600 AlarmThresholds="10,25,50,100,200"
+		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) PeriodInSeconds=21600 AlarmThresholds="10,25,50,100,200"
 
 .PHONY: templates-test
 templates-test: create-base-user-group-template-test create-users-template-test create-developer-access-template-test create-administrator-access-template-test create-billing-alarm-template-test
