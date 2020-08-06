@@ -2,9 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Billing Alerts for AWS Account
 
 Parameters:
-  PeriodInSeconds:
-    Type: Number
-    Description: Treshold period in seconds in which trigger will operate
   AlarmThresholds:
     Type: CommaDelimitedList
     Description: "Enter five (5) values for the billing alarms (e.g., 1,5,10,20,50)"
@@ -24,7 +21,7 @@ Resources:
       EvaluationPeriods: 1
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
-      Period: !Ref PeriodInSeconds
+      Period: 21600
       TreatMissingData: breaching
       Statistic: Maximum
       Threshold: !Select [0, !Ref AlarmThresholds]
@@ -44,7 +41,7 @@ Resources:
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref PeriodInSeconds
+      Period: 21600
       Statistic: Maximum
       Threshold: !Select [1, !Ref AlarmThresholds]
 
@@ -63,7 +60,7 @@ Resources:
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref PeriodInSeconds
+      Period: 21600
       Statistic: Maximum
       Threshold: !Select [2, !Ref AlarmThresholds]
 
@@ -82,7 +79,7 @@ Resources:
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref PeriodInSeconds
+      Period: 21600
       Statistic: Maximum
       Threshold: !Select [3, !Ref AlarmThresholds]
 
@@ -101,7 +98,7 @@ Resources:
       MetricName: EstimatedCharges
       Namespace: AWS/Billing
       TreatMissingData: breaching
-      Period: !Ref PeriodInSeconds
+      Period: 21600
       Statistic: Maximum
       Threshold: !Select [4, !Ref AlarmThresholds]
 

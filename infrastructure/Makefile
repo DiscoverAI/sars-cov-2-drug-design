@@ -121,10 +121,10 @@ update-billing-alarm:
 		--change-set-type UPDATE \
 		--template-body file://./billing-alarm.yaml \
 		--stack-name "$(project_name)-billing-alarm" \
-		--region $(region) \
+		--region "us-east-1" \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-tortugas/developer \
-		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=PeriodInSeconds,ParameterValue=21600 ParameterKey=AlarmThresholds,ParameterValue="10,25,50,100,200"
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=AlarmThresholds,ParameterValue="10,25,50,100,200"
 
 .PHONY: create-billing-alarm
 create-billing-alarm:
@@ -134,7 +134,7 @@ create-billing-alarm:
 		--region "us-east-1" \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base-tortugas/developer \
-		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) PeriodInSeconds=21600 AlarmThresholds="10,25,50,100,200"
+		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) AlarmThresholds="10,25,50,100,200"
 
 .PHONY: templates-test
 templates-test: create-base-user-group-template-test create-users-template-test create-developer-access-template-test create-administrator-access-template-test create-billing-alarm-template-test
