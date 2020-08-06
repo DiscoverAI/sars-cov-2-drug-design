@@ -23,32 +23,42 @@ Resources:
       Groups:
         - !Ref BaseUserGroup
       PolicyDocument:
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Action:
-              - "iam:DeactivateMFADevice"
-              - "iam:EnableMFADevice"
-              - "iam:ResyncMFADevice"
               - "iam:ListVirtualMFADevices"
+            Resource:
+              - "*"
+          - Effect: Allow
+            Action:
               - "iam:ListMFADevices"
             Resource:
-              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
+              - "arn:aws:iam::*:mfa/*"
+              - "arn:aws:iam::*:user/${aws:username}"
+              - !Sub "arn:aws:iam::*:user/${OrgName}/${!aws:username}"
+          - Effect: Allow
+            Action:
+              - "iam:CreateVirtualMFADevice"
+              - "iam:DeleteVirtualMFADevice"
+              - "iam:EnableMFADevice"
+              - "iam:ResyncMFADevice"
+            Resource:
+              - "arn:aws:iam::*:mfa/${aws:username}"
+              - "arn:aws:iam::*:user/${aws:username}"
+              - !Sub "arn:aws:iam::*:user/${OrgName}/${!aws:username}"
+          - Effect: Allow
+            Action:
+              - "iam:DeactivateMFADevice"
+            Resource:
+              - "arn:aws:iam::*:mfa/${aws:username}"
+              - "arn:aws:iam::*:user/${aws:username}"
+              - !Sub "arn:aws:iam::*:user/${OrgName}/${!aws:username}"
             Condition:
               Bool:
                 aws:MultiFactorAuthPresent: "true"
               NumericLessThanEquals:
                 aws:MultiFactorAuthAge: 43200
-          - Effect: Allow
-            Action:
-              -  "iam:CreateVirtualMFADevice"
-            Resource:
-              - !Sub "arn:aws:iam::${AWS::AccountId}:mfa/${!aws:username}"
-          - Effect: Allow
-            Action:
-              - "iam:ListVirtualMFADevices"
-              - "iam:ListMFADevices"
-            Resource:
-              - !Sub "arn:aws:iam::${AWS::AccountId}:mfa/*"
   BaseUserManageAccessKeysPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -56,6 +66,7 @@ Resources:
       Groups:
         - !Ref BaseUserGroup
       PolicyDocument:
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Action:
@@ -66,6 +77,7 @@ Resources:
                 - "iam:GetAccessKeyLastUsed"
             Resource:
               - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${OrgName}/${!aws:username}"
             Condition:
               Bool:
                 aws:MultiFactorAuthPresent: "true"
@@ -78,13 +90,13 @@ Resources:
       Groups:
         - !Ref BaseUserGroup
       PolicyDocument:
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Action:
               - "iam:GetAccountSummary"
               - "iam:ListAccountAliases"
               - "iam:ListGroupsForUser"
-              - "iam:ListUsers"
             Resource:
               - !Sub "arn:aws:iam::${AWS::AccountId}:user/*"
             Condition:
@@ -94,9 +106,15 @@ Resources:
                 aws:MultiFactorAuthAge: 43200
           - Effect: Allow
             Action:
+              - "iam:ListUsers"
+            Resource:
+              - "*"
+          - Effect: Allow
+            Action:
               - "iam:GetUser"
             Resource:
               - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${OrgName}/${!aws:username}"
   BaseUserUpdateIAMPasswordPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -104,6 +122,7 @@ Resources:
       Groups:
         - !Ref BaseUserGroup
       PolicyDocument:
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Action:
@@ -113,5 +132,8 @@ Resources:
           - Effect: Allow
             Action:
               - "iam:ChangePassword"
+              - "iam:GetLoginProfile"
+              - "iam:UpdateLoginProfile"
             Resource:
               - !Sub "arn:aws:iam::${AWS::AccountId}:user/${!aws:username}"
+              - !Sub "arn:aws:iam::${AWS::AccountId}:user/${OrgName}/${!aws:username}"

@@ -5,9 +5,12 @@ group_name = "base-user"
 org_name = "tortugas"
 region = "eu-central-1"
 
+admin_profile = "tortugas-administrator"
+developer_profile = "tortugas-developer"
+
 .PHONY: create-administrator-access-template-test
 create-administrator-access-template-test:
-	aws cloudformation validate-template --profile tortugas-base-tortugas/administrator --template-body file://./administrator-access.yaml >> /dev/null
+	aws cloudformation validate-template --profile tortugas-base --template-body file://./administrator-access.yaml >> /dev/null
 
 .PHONY: create-administor-access
 create-administrator-access:
@@ -33,7 +36,7 @@ update-administrator-access:
 
 .PHONY: create-developer-access-template-test
 create-developer-access-template-test:
-	aws cloudformation validate-template --profile tortugas-base-tortugas/administrator --region $(region) --template-body file://./developer-access.yaml >> /dev/null
+	aws cloudformation validate-template --profile $(admin_profile) --region $(region) --template-body file://./developer-access.yaml >> /dev/null
 
 .PHONY: create-developer-access
 create-developer-access:
@@ -42,7 +45,7 @@ create-developer-access:
 		--stack-name "$(project_name)-developer-access" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile $(admin_profile) \
 		--parameter-overrides ProjectName=$(project_name) RoleName=$(developer_role_name) OrgName=$(org_name)
 
 .PHONY: update-developer-access
@@ -54,12 +57,12 @@ update-developer-access:
 		--stack-name "$(project_name)-developer-access" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile $(admin_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(developer_role_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 .PHONY: create-users-template-test
 create-users-template-test:
-	aws cloudformation validate-template --profile tortugas-base-tortugas/administrator --region $(region) --template-body file://./users.yaml >> /dev/null
+	aws cloudformation validate-template --profile $(admin_profile) --region $(region) --template-body file://./users.yaml >> /dev/null
 
 .PHONY: create-users
 create-users:
@@ -68,7 +71,7 @@ create-users:
 		--stack-name "$(project_name)-users" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile $(admin_profile) \
 		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) OrgName=$(org_name)
 
 .PHONY: update-users
@@ -80,13 +83,13 @@ update-users:
 		--stack-name "$(project_name)-users" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile $(admin_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 
 .PHONY: create-base-user-group-template-test
 create-base-user-group-template-test:
-	aws cloudformation validate-template --profile tortugas-base-tortugas/administrator --region $(region) --template-body file://./base-user-group.yaml >> /dev/null
+	aws cloudformation validate-template --profile $(admin_profile) --region $(region) --template-body file://./base-user-group.yaml >> /dev/null
 
 .PHONY: create-base-user-group
 create-base-user-group:
@@ -95,7 +98,7 @@ create-base-user-group:
 		--stack-name "$(project_name)-base-user-group" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile $(admin_profile) \
 		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) OrgName=$(org_name)
 
 .PHONY: update-base-user-group
@@ -107,12 +110,12 @@ update-base-user-group:
 		--stack-name "$(project_name)-base-user-group" \
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/administrator \
+		--profile $(admin_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
 .PHONY: create-billing-alarm-template-test
 create-billing-alarm-template-test:
-	aws cloudformation validate-template --profile tortugas-base-tortugas/developer --region "us-east-1" --template-body file://./base-user-group.yaml >> /dev/null
+	aws cloudformation validate-template --profile $(developer_profile) --region "us-east-1" --template-body file://./base-user-group.yaml >> /dev/null
 
 .PHONY: update-billing-alarm
 update-billing-alarm:
@@ -123,7 +126,7 @@ update-billing-alarm:
 		--stack-name "$(project_name)-billing-alarm" \
 		--region "us-east-1" \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/developer \
+		--profile $(developer_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=AlarmThresholds,ParameterValue="10,25,50,100,200"
 
 .PHONY: create-billing-alarm
@@ -133,7 +136,7 @@ create-billing-alarm:
 		--stack-name "$(project_name)-billing-alarm" \
 		--region "us-east-1" \
 		--capabilities CAPABILITY_NAMED_IAM \
-		--profile tortugas-base-tortugas/developer \
+		--profile $(developer_profile) \
 		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) AlarmThresholds="10,25,50,100,200"
 
 .PHONY: templates-test

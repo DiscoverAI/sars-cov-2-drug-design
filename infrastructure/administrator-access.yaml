@@ -29,6 +29,11 @@ Resources:
                 - !Sub "arn:aws:iam::${AWS::AccountId}:user/lkummer"
             Action:
               - sts:AssumeRole
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: "true"
+              NumericLessThanEquals:
+                aws:MultiFactorAuthAge: 43200
       Policies:
         - PolicyName: AdminAccess
           PolicyDocument:
@@ -42,8 +47,4 @@ Resources:
                   - "cloudformation:*"
                 Resource:
                   - "*"
-                Condition:
-                  Bool:
-                    aws:MultiFactorAuthPresent: "true"
-                  NumericLessThanEquals:
-                    aws:MultiFactorAuthAge: 43200
+
