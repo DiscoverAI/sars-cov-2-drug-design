@@ -7,6 +7,9 @@ region = "eu-central-1"
 
 admin_profile = "tortugas-administrator"
 developer_profile = "tortugas-developer"
+wait_for_status_change=5
+
+now := $(shell date +%s)
 
 .PHONY: create-administrator-access-template-test
 create-administrator-access-template-test:
@@ -25,7 +28,7 @@ create-administrator-access:
 .PHONY: update-administrator-access
 update-administrator-access:
 	aws cloudformation create-change-set \
-		--change-set-name "$(project_name)-administrator-access-$(shell date +%s)" \
+		--change-set-name "$(project_name)-administrator-access-${now}" \
 		--change-set-type UPDATE \
 		--template-body file://./administrator-access.yaml \
 		--stack-name "$(project_name)-administrator-access" \
@@ -33,6 +36,14 @@ update-administrator-access:
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile tortugas-base \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(admin_role_name) ParameterKey=OrgName,ParameterValue=$(org_name)
+
+	sleep $(wait_for_status_change)
+
+	aws cloudformation execute-change-set \
+		--change-set-name "$(project_name)-administrator-access-${now}" \
+		--stack-name "$(project_name)-administrator-access" \
+		--region $(region) \
+		--profile $(admin_profile)
 
 .PHONY: create-developer-access-template-test
 create-developer-access-template-test:
@@ -51,7 +62,7 @@ create-developer-access:
 .PHONY: update-developer-access
 update-developer-access:
 	aws cloudformation create-change-set \
-		--change-set-name "$(project_name)-developer-access-$(shell date +%s)" \
+		--change-set-name "$(project_name)-developer-access-${now}" \
 		--change-set-type UPDATE \
 		--template-body file://./developer-access.yaml \
 		--stack-name "$(project_name)-developer-access" \
@@ -59,6 +70,14 @@ update-developer-access:
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile $(admin_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=RoleName,ParameterValue=$(developer_role_name) ParameterKey=OrgName,ParameterValue=$(org_name)
+
+	sleep $(wait_for_status_change)
+
+	aws cloudformation execute-change-set \
+		--change-set-name "$(project_name)-developer-access-${now}" \
+		--stack-name "$(project_name)-developer-access" \
+		--region $(region) \
+		--profile $(admin_profile)
 
 .PHONY: create-users-template-test
 create-users-template-test:
@@ -77,7 +96,7 @@ create-users:
 .PHONY: update-users
 update-users:
 	aws cloudformation create-change-set \
-		--change-set-name "$(project_name)-users-$(shell date +%s)" \
+		--change-set-name "$(project_name)-users-${now}" \
 		--change-set-type UPDATE \
 		--template-body file://./users.yaml \
 		--stack-name "$(project_name)-users" \
@@ -86,6 +105,13 @@ update-users:
 		--profile $(admin_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
+	sleep $(wait_for_status_change)
+
+	aws cloudformation execute-change-set \
+		--change-set-name "$(project_name)-users-${now}" \
+		--stack-name "$(project_name)-users" \
+		--region $(region) \
+		--profile $(admin_profile)
 
 .PHONY: create-base-user-group-template-test
 create-base-user-group-template-test:
@@ -104,7 +130,7 @@ create-base-user-group:
 .PHONY: update-base-user-group
 update-base-user-group:
 	aws cloudformation create-change-set \
-		--change-set-name "$(project_name)-base-user-group-$(shell date +%s)" \
+		--change-set-name "$(project_name)-base-user-group-${now}" \
 		--change-set-type UPDATE \
 		--template-body file://./base-user-group.yaml \
 		--stack-name "$(project_name)-base-user-group" \
@@ -113,6 +139,14 @@ update-base-user-group:
 		--profile $(admin_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=OrgName,ParameterValue=$(org_name)
 
+	sleep $(wait_for_status_change)
+
+	aws cloudformation execute-change-set \
+		--change-set-name "$(project_name)-base-user-group-${now}" \
+		--stack-name "$(project_name)-base-user-group" \
+		--region $(region) \
+		--profile $(admin_profile)
+
 .PHONY: create-billing-alarm-template-test
 create-billing-alarm-template-test:
 	aws cloudformation validate-template --profile $(developer_profile) --region "us-east-1" --template-body file://./base-user-group.yaml >> /dev/null
@@ -120,7 +154,7 @@ create-billing-alarm-template-test:
 .PHONY: update-billing-alarm
 update-billing-alarm:
 	aws cloudformation create-change-set \
-		--change-set-name "$(project_name)-billing-alarm-$(shell date +%s)" \
+		--change-set-name "$(project_name)-billing-alarm-${now}" \
 		--change-set-type UPDATE \
 		--template-body file://./billing-alarm.yaml \
 		--stack-name "$(project_name)-billing-alarm" \
@@ -128,6 +162,14 @@ update-billing-alarm:
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile $(developer_profile) \
 		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=AlarmThresholds,ParameterValue="10,25,50,100,200"
+
+	sleep $(wait_for_status_change)
+
+	aws cloudformation execute-change-set \
+		--change-set-name "$(project_name)-billing-alarm-${now}" \
+		--stack-name "$(project_name)-billing-alarm" \
+		--region $(region) \
+		--profile $(admin_profile)
 
 .PHONY: create-billing-alarm
 create-billing-alarm:
