@@ -181,6 +181,42 @@ create-billing-alarm:
 		--profile $(developer_profile) \
 		--parameter-overrides ProjectName=$(project_name) GroupName=$(group_name) AlarmThresholds="10,25,50,100,200"
 
+.PHONY: create-vpc
+create-vpc-template-test:
+	aws cloudformation validate-template --profile $(developer_profile) --region $(region) --template-body file://./vpc.yaml >> /dev/null
+
+.PHONY: create-vpc
+create-vpc:
+	aws cloudformation deploy \
+		--template-file vpc.yaml \
+		--stack-name "$(project_name)-vpc" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile $(developer_profile) \
+		--parameter-overrides ProjectName=$(project_name) EnvironmentName=$(project_name) VpcCIDR=10.1.0.0/16 PublicSubnet1CIDR=10.1.1.0/24 PublicSubnet2CIDR=10.1.2.0/24 PrivateSubnet1CIDR=10.1.9.0/24 PrivateSubnet2CIDR=10.1.8.0/24
+
+.PHONY: update-vpc
+update-vpc:
+	aws cloudformation create-change-set \
+		--change-set-name "$(project_name)-vpc-${now}" \
+		--change-set-type UPDATE \
+		--template-body file://./vpc.yaml \
+		--stack-name "$(project_name)-vpc" \
+		--region $(region) \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--profile $(developer_profile) \
+		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=EnvironmentName,ParameterValue=$(project_name) ParameterKey=VpcCIDR,ParameterValue=10.1.0.0/16 ParameterKey=PublicSubnet1CIDR,ParameterValue=10.1.1.0/24 ParameterKey=PublicSubnet2CIDR,ParameterValue=10.1.2.0/24 ParameterKey=PrivateSubnet1CIDR,ParameterValue=10.1.9.0/24 ParameterKey=PrivateSubnet2CIDR,ParameterValue=10.1.8.0/24
+
+	sleep $(wait_for_status_change)
+
+	aws cloudformation execute-change-set \
+		--change-set-name "$(project_name)-vpc-${now}" \
+		--stack-name "$(project_name)-vpc" \
+		--region $(region) \
+		--profile $(developer_profile)
+
+
+
 .PHONY: templates-test
 templates-test: create-base-user-group-template-test create-users-template-test create-developer-access-template-test create-administrator-access-template-test create-billing-alarm-template-test
 
