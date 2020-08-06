@@ -1,3 +1,4 @@
 .idea
 .env
 infrastructure/.DS_Store
+state/saul-goodman/airflow.db
