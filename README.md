@@ -6,7 +6,7 @@ There is a notebook with more [general information](https://github.com/DiscoverA
 about the virus you can read.
 
 ## Setup
-This is a git repository with submodules. To get the submodules run:
+Before you start make sure that your public ssh key is available in Github. This is a git repository with submodules. To get the submodules run:
 ```bash
 git submodule update --init --recursive
 ```

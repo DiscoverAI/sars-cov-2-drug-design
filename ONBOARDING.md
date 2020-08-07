@@ -8,7 +8,7 @@ Please ask the [owner of this repository](https://github.com/meandor) for:
 ### CircleCI
 We use CircleCI as our CI/CD tool. Access is delegated via the Github Org, therefore, so long as you are a member of the Project/Org, you will be able to access the pipelines on CircleCI.
 
-Follow the `SARS-CoV2-Drug-Design` project in [CircleCI](https://www.circleci.com). For more information, check out the [official docs](https://circleci.com/docs/2.0/project-build/).
+You are able to follow the `SARS-CoV2-Drug-Design` project to [CircleCI](https://www.circleci.com) by logging in with your Github account and selecting the organization "DiscoverAI". For more information, check out the [official docs](https://circleci.com/docs/2.0/project-build/).
 
 ### AWS
 Our infrastructure is deployed in AWS. In order to get access, please add yourself to the [users list](infrastructure/users.yaml) and contact one of the administrators to apply those changes and send you credentials via a PGP key (please provide this to the administrator on contact).
