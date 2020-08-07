@@ -18,6 +18,6 @@ https://signin.aws.amazon.com/switchrole?account=<SOME-AWS-ACCOUNT-ID>&roleName=
 ```
 
 ## CLI Access
-We are using a development environment provided by [kelseyomk/assume-role](https://github.com/kelseymok/assume-role). Please follow the instructions there to set up your CLI.
+We are using a development environment provided by [kelseymok/assume-role](https://github.com/kelseymok/assume-role). Please follow the instructions there to set up your CLI.
 
 Most importantly, the `base_profile` name we are using is `tortugas` (this will make sense after your read the docs).
