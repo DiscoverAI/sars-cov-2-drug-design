@@ -12,7 +12,7 @@ Most likely, you will be given the permissions to assume the Developer role (and
 ## Console Access
 In order to assume the Developer (or any other role) in the AWS Account, you will need to first [set up an MFA device](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html). *Then log out and log back in again (weird AWS quirk)*.
 
-You can access the Developer role through this URL (replace `<SOME-AWS-ACCOUNT-ID>` with the 10-digit AWS account number provided to you with your credentials):
+You can access the Developer role through this URL (replace `<SOME-AWS-ACCOUNT-ID>` with the 14-digit AWS account number (including two dashes) provided to you with your credentials):
 ```bash
 https://signin.aws.amazon.com/switchrole?account=<SOME-AWS-ACCOUNT-ID>&roleName=tortugas/developer
 ```
