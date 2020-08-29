@@ -37,6 +37,9 @@ Parameters:
     Type: String
     Default: 10.192.21.0/24
 
+  Region:
+    Type: String
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -207,6 +210,16 @@ Resources:
       GroupDescription: "Security group with no ingress rule"
       VpcId: !Ref VPC
 
+  HostedZone:
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      HostedZoneConfig:
+        Comment: 'Internal Hosted Zone for Internal Applications'
+      Name: 'sars-cov2.local'
+      VPCs:
+        - VPCId: !Ref VPC
+          VPCRegion: !Ref Region
+
 Outputs:
   VPC:
     Description: A reference to the created VPC
@@ -245,3 +258,9 @@ Outputs:
   NoIngressSecurityGroup:
     Description: Security group with no ingress rule
     Value: !Ref NoIngressSecurityGroup
+
+  HostedZoneID:
+    Description: HostedZone ID
+    Value: !Ref HostedZone
+    Export:
+      Name: !Sub '${AWS::StackName}-HostedZoneID'
