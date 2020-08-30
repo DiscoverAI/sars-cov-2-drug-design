@@ -215,7 +215,7 @@ Resources:
     Properties:
       HostedZoneConfig:
         Comment: 'Internal Hosted Zone for Internal Applications'
-      Name: 'sars-cov2.local'
+      Name: 'sars-cov-2.local'
       VPCs:
         - VPCId: !Ref VPC
           VPCRegion: !Ref Region
