@@ -8,7 +8,7 @@ script_dir=$(cd "$(dirname "$0")" ; pwd -P)
 app_name=dev-env
 
 goal_assume-role() {
-  pushd "${script_dir}/assume-role" > /dev/null
+  pushd "${script_dir}" > /dev/null
     base_profile="tortugas-base"
     role="${1:-}"
     if [ -z "${role}" ]; then
@@ -16,7 +16,10 @@ goal_assume-role() {
       exit 1
     fi
 
-    ./go assume-role ${base_profile} "tortugas/${role}"
+  docker run -it \
+    -v "$(cd ~; pwd)/.aws:/root/.aws" \
+    --entrypoint="" \
+    kb1rd/assume-role assume-role ${base_profile} "tortugas/${role}"
   popd > /dev/null
 }
 
