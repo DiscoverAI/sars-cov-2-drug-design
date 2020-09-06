@@ -230,6 +230,92 @@ Resources:
         'Fn::Sub': 'com.amazonaws.${AWS::Region}.s3'
       VpcId: !Ref VPC
 
+  VPCEndpointSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${ProjectName}-vpc-endpoints"
+      GroupDescription: "Security group for VPC Endpoints"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref PrivateSubnet1CIDR
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref PrivateSubnet2CIDR
+
+  CloudwatchVPCEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      ServiceName:
+        'Fn::Sub': 'com.amazonaws.${AWS::Region}.monitoring'
+      VpcId: !Ref VPC
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - !GetAtt VPCEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  SSMVPCEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      ServiceName:
+        'Fn::Sub': 'com.amazonaws.${AWS::Region}.ssm'
+      VpcId: !Ref VPC
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - !GetAtt VPCEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  CloudTrailVPCEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      ServiceName:
+        'Fn::Sub': 'com.amazonaws.${AWS::Region}.cloudtrail'
+      VpcId: !Ref VPC
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - !GetAtt VPCEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  ECSVPCEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      ServiceName:
+        'Fn::Sub': 'com.amazonaws.${AWS::Region}.ecs'
+      VpcId: !Ref VPC
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - !GetAtt VPCEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  ECSAgentVPCEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      ServiceName:
+        'Fn::Sub': 'com.amazonaws.${AWS::Region}.ecs-agent'
+      VpcId: !Ref VPC
+      VpcEndpointType: "Interface"
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - !GetAtt VPCEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
   VPCFlowLogsRole:
     Type: AWS::IAM::Role
     Properties:
