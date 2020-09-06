@@ -161,15 +161,15 @@ update-billing-alarm:
 		--region "us-east-1" \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile $(developer_profile) \
-		--parameters ParameterKey=ProjectName,ParameterValue=$(project_name) ParameterKey=GroupName,ParameterValue=$(group_name) ParameterKey=AlarmThresholds,ParameterValue="10,25,50,100,200"
+		--parameters ParameterKey=AlarmThresholds,ParameterValue=\"10,25,50,100,200\"
 
 	sleep $(wait_for_status_change)
 
 	aws cloudformation execute-change-set \
 		--change-set-name "$(project_name)-billing-alarm-${now}" \
 		--stack-name "$(project_name)-billing-alarm" \
-		--region $(region) \
-		--profile $(admin_profile)
+		--region "us-east-1" \
+		--profile $(developer_profile)
 
 .PHONY: create-billing-alarm
 create-billing-alarm:
