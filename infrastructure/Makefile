@@ -193,7 +193,7 @@ create-vpc:
 		--region $(region) \
 		--capabilities CAPABILITY_NAMED_IAM \
 		--profile $(developer_profile) \
-		--parameter-overrides ProjectName=$(project_name) EnvironmentName=$(project_name) VpcCIDR=10.1.0.0/16 PublicSubnet1CIDR=10.1.1.0/24 PublicSubnet2CIDR=10.1.2.0/24 PrivateSubnet1CIDR=10.1.9.0/24 PrivateSubnet2CIDR=10.1.8.0/24 Region=$(region)
+		--parameter-overrides ProjectName=$(project_name) EnvironmentName=$(project_name) VpcCIDR=10.1.0.0/16 PublicSubnet1CIDR=10.1.1.0/24 PrivateSubnet1CIDR=10.1.9.0/24 Region=$(region)
 
 .PHONY: update-vpc
 update-vpc:
