@@ -1,4 +1,7 @@
 # SARS-CoV-2 drug design
+
+[![Gitter](https://badges.gitter.im/discoverai/community.svg)](https://gitter.im/discoverai/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 This projects purpose is to create a drug (drug discovery and drug design) that is likely to bind with the spike
 proteins of SARS-CoV-2 und not bind with any human cell receptors. This would render the virus ineffective inside the body.
 
